@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c81ffdbc25f36b34f95011ac7569afda
+timeCreated: 1497475712
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Master Breaker 3D Italic
+  fontNames:
+  - Master Breaker 3D Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

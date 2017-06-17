@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 822e8267a81ef7e4db278082554e1535
+timeCreated: 1497475712
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Master Breaker Super-Italic
+  fontNames:
+  - Master Breaker Super-Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a429cb66ba68c3e4eb7803eaad9a0ab8
+timeCreated: 1497475712
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Master Breaker Laser
+  fontNames:
+  - Master Breaker Laser
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
