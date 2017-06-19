@@ -4,90 +4,63 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-    private Rigidbody rb;
+    //deklaracje: dane dot. m. in. gracza, jego parametrów ruchu, zmienna statyczna dot. szybkości odtwarzania gry
+    public static Rigidbody rb;
     public float x;
     public float y;
     public GameObject player;
-    public bool blockMovement = false;
-    public GameObject teleportDefence1;
-    public GameObject teleportDefence2;
-    public Collider telDefence1;
-    public Collider telDefence2;
-    public Vector3 plPosTeleportHelp1;
-    public Vector3 plPosTeleportHelp2;
-    public Vector3 plPos;
+    public static bool blockMovement;  // jeśli true; gracz nie może się już poruszać
+    public static float timeSpeed = 3f;  // czas w grze leci 3x szybciej; przy obniżeniu prędkości ruchu x3 - mniejsza bezwładność potworków - dobre trzymanie przez nie wymaganych pozycji
 
-    // Use this for initialization
+    // przypasanie początkowych wartości
     void Start () {
         rb = GetComponent<Rigidbody>();
-        telDefence1 = teleportDefence1.GetComponent<Collider>();
-        telDefence2 = teleportDefence2.GetComponent<Collider>();
+        blockMovement = false;
+        Time.timeScale = timeSpeed;
     }
 
+    // ignorowana jest kolizja gracza z miejscami występowania teleportów. Dzięki temu gracz może z nich korzystać; bez obawy, że wejdą tam potworki
     void OnCollisionEnter(Collision coll)
     {
-        if (coll.gameObject.name == "Teleport_Defence")
+        if (coll.gameObject.tag == "tel_defence")
         {
-            plPosTeleportHelp1 = player.transform.position;
-            telDefence1.enabled = false;
+            Physics.IgnoreCollision(coll.collider, GetComponent<Collider>());
         }
-        if (coll.gameObject.name == "Teleport_Defence2")
-        {
-            plPosTeleportHelp2 = player.transform.position;
-            telDefence2.enabled = false;
-        }
-        
     }
 
-    // FixedUpdate - recommended while working with Rigidbody
     void FixedUpdate () {
 
-        Debug.Log(telDefence1.enabled +", "+ telDefence2.enabled+", "+plPos+", "+plPosTeleportHelp1);
-        plPos = player.transform.position;
-        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0);
+        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0);  // pilnowanie, by zawsze współrzędna 'z' była równa 0. Powód: --
+                                         // -- podczas grania, 'z' nieznacznie się zwiększało przy ocieraniu gracza o ścianki. Bardzo bardzo nieznacznie, ale zabezpieczenie zrobione
 
+        // jeśli true - zablokowanie możliwości ruchu gracza - ważne po teleportacji, żeby gracz nie wskoczył szybkim pędem w potworka, który może stać przy tym drugim teleporcie
         if (blockMovement == false)
         {
             x = Input.GetAxis("Horizontal");
             y = Input.GetAxis("Vertical");
-            rb.velocity = new Vector3(x * 3, y * 3, 0);
-        }
-        
-        
-        if ((Mathf.Abs(plPos.x - plPosTeleportHelp1.x) > 0.9 || 
-            Mathf.Abs(plPos.y - plPosTeleportHelp1.y) > 0.9))
-        {
-            telDefence1.enabled = true;
-        }
-        if ((Mathf.Abs(plPos.x - plPosTeleportHelp2.x) > 0.9 ||
-            Mathf.Abs(plPos.y - plPosTeleportHelp2.y) > 0.9))
-        {
-            telDefence2.enabled = true;
+            rb.velocity = new Vector3(x * 1, y * 1, 0);
         }
 
-
-
+        // obsługa teleportacji gracza z teleportu 1 do teleportu 2 oraz na odwrót
         if (player.transform.position.x <= -12.59f && player.transform.position.y <= 12.5f && player.transform.position.y >= 11.5f)
         {
-            telDefence2.enabled = false;
             player.transform.position = new Vector3(12.5f, 11, 0);
-            StartCoroutine(teleportFreezeEnumerator());
+            StartCoroutine(teleportFreezeEnumerator());  // start korutyny zatrzymującej i blokującej gracza na małą chwilę
         }
 
         if (player.transform.position.x >= 12.59f && player.transform.position.y <= 11.5f && player.transform.position.y >= 10.5f)
         {
-            telDefence1.enabled = false;
             player.transform.position = new Vector3(-12.5f, 12, 0);
             StartCoroutine(teleportFreezeEnumerator());
         }
     }
 
+    // korutyna zatrzymująca i blokująca gracza na małą chwilę
     public IEnumerator teleportFreezeEnumerator()
     {
         blockMovement = true;
         rb.velocity = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.8f * Movement.timeSpeed);
         blockMovement = false;
     }
-
 }
