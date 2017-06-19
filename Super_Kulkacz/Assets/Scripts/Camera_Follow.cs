@@ -16,7 +16,7 @@ public class Camera_Follow : MonoBehaviour {
         offset_Dist = transform.position - Player.transform.position;  // definicja odległości między kamerą a graczem
 	}
 	
-	void Update () {
+	void LateUpdate () {
         transform.position = Player.transform.position + offset_Dist; // podążanie kamery za graczem
 
         // określenie ograniczeń, żeby kamera nie przekroczyła granic mapy - kierunki główne
