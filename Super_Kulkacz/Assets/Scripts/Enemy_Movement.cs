@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy_Movement : MonoBehaviour
 {
     // deklaracje:  m. in. wiele tablic; zachowaie każdego z dodanych potworków traktowane jest osobno, żeby można było np. pobierać poszczególne pozycje każdego z nich
-    private Rigidbody rbod;
+    private Rigidbody[] rbod;
     public GameObject[] enemies;
     public static int tab_length;  // długość każdej tablicy, równa ilości wprowadzonych w grze potworków
     public int speed;              // prędkość potworka
@@ -24,9 +24,9 @@ public class Enemy_Movement : MonoBehaviour
     // określenie dugości tablic, przypisania początkowych wartości
     void Start()
     {
-        rbod = GetComponent<Rigidbody>();
         speed = 1;    // 1, co przy timeScalu = 3 anihiluje zbędną inercję, co wiązałoby się z traceniem strategicznych dla potworków pozycji
         tab_length = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        rbod = new Rigidbody[tab_length];
         isCollision = new bool[tab_length];
         enemies = new GameObject[tab_length];
         positioningsX = new float[tab_length];                 /* określenie długości wszystkich tablic */
@@ -40,6 +40,7 @@ public class Enemy_Movement : MonoBehaviour
         {
             string nameText = "r" + i;
             enemies[i - 1] = GameObject.Find(nameText);   // każdy potworek identyfikowany jest po nazwie
+            rbod[i-1] = enemies[i-1].GetComponent<Rigidbody>();
             isCollision[i-1] = false;
             nbToSelectsTab[i - 1] = new List<int>(new int[] { 1, 2, 3, 4 });
         }
@@ -75,28 +76,28 @@ public class Enemy_Movement : MonoBehaviour
                 // ważne: przewidzenie, czy nastąpiłaby kolizja, gdyby dany potworek przesunął się w kierunku, określonym już przez random
                 if(rands[i-1] == 1)
                 {
-                    if (rbod.SweepTest(Vector3.left, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
+                    if (rbod[i-1].SweepTest(Vector3.left, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
                     {
                         isCollision[i - 1] = true;
                     }
                 }
                 else if (rands[i - 1] == 2)
                 {
-                    if (rbod.SweepTest(Vector3.right, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
+                    if (rbod[i-1].SweepTest(Vector3.right, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
                     {
                         isCollision[i - 1] = true;
                     }
                 }
                 else if (rands[i - 1] == 3)
                 {
-                    if (rbod.SweepTest(Vector3.down, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
+                    if (rbod[i-1].SweepTest(Vector3.down, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
                     {
                         isCollision[i - 1] = true;
                     }
                 }
                 else if (rands[i - 1] == 4)
                 {
-                    if (rbod.SweepTest(Vector3.up, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
+                    if (rbod[i-1].SweepTest(Vector3.up, out hitInf[i - 1], 1f, QueryTriggerInteraction.Ignore))
                     {
                         isCollision[i - 1] = true;
                     }
@@ -107,19 +108,19 @@ public class Enemy_Movement : MonoBehaviour
                 {
                     if (rands[i - 1] == 1)
                     {
-                        rbod.velocity = new Vector3(-speed, 0, 0);
+                        rbod[i-1].velocity = new Vector3(-speed, 0, 0);
                     }
                     else if (rands[i - 1] == 2)
                     {
-                        rbod.velocity = new Vector3(speed, 0, 0);
+                        rbod[i-1].velocity = new Vector3(speed, 0, 0);
                     }
                     else if (rands[i - 1] == 3)
                     {
-                        rbod.velocity = new Vector3(0, -speed, 0);
+                        rbod[i-1].velocity = new Vector3(0, -speed, 0);
                     }
                     else if (rands[i - 1] == 4)
                     {
-                        rbod.velocity = new Vector3(0, speed, 0);
+                        rbod[i-1].velocity = new Vector3(0, speed, 0);
                     }
                 }
 

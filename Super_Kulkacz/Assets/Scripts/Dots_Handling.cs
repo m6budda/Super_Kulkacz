@@ -24,7 +24,7 @@ public class Dots_Handling : MonoBehaviour {
         if (collid.gameObject.tag == "dot")
         {
             src.PlayOneShot(collectSound, 1f);
-            Destroy(collid.gameObject);
+            collid.gameObject.transform.position = new Vector3(0, 0, 500);
             points++;
         }
     }
@@ -38,7 +38,7 @@ public class Dots_Handling : MonoBehaviour {
             Movement.blockMovement = true;
             Movement.rb.velocity = new Vector3(0, 0, 0);
             StartCoroutine(ExplosionCour());
-            Destroy(coll.gameObject);
+            coll.gameObject.transform.position = new Vector3(0, 0, 400);
         }
     }
 
@@ -47,7 +47,7 @@ public class Dots_Handling : MonoBehaviour {
     {
         pointsText.text = "Points: " + points;
 
-        if(GameObject.FindGameObjectsWithTag("dot").Length == 0)
+        if(points == GameObject.FindGameObjectsWithTag("dot").Length)
         {
             Time.timeScale = 1f;
             SceneManager.LoadScene("You_Won");
